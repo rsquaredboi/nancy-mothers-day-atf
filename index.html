@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Grandma + Lem Key Visual Lab</title>
+<style>
+  :root {
+    --bg: #fff9ee;
+    --ink: #1a1510;
+    --muted: #6b5f4e;
+    --accent: #f4c542;
+    --accent-soft: #fde8a7;
+    --border: rgba(26, 21, 16, 0.08);
+    --card: #ffffff;
+    --pink: #f7c7c7;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: ui-serif, Georgia, "Iowan Old Style", "Apple Garamond", serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .hero {
+    padding: 56px 24px 32px;
+    max-width: 1280px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .kicker {
+    font: 600 12px/1 ui-sans-serif, system-ui, -apple-system, sans-serif;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  h1 {
+    margin: 0 0 10px;
+    font-size: clamp(32px, 5vw, 54px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  h1 em {
+    font-style: italic;
+    color: #c68a10;
+    background: linear-gradient(180deg, transparent 62%, var(--accent-soft) 62%);
+    padding: 0 4px;
+  }
+  .sub {
+    font: 400 17px/1.55 ui-sans-serif, system-ui, sans-serif;
+    color: var(--muted);
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .status {
+    margin: 28px auto 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font: 600 12px/1 ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: #6b4e00;
+    border: 1px solid rgba(107, 78, 0, 0.15);
+  }
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #c68a10;
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; transform: scale(0.85); }
+    50% { opacity: 1; transform: scale(1.1); }
+  }
+  .grid {
+    max-width: 1280px;
+    margin: 24px auto 80px;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 24px;
+  }
+  .card {
+    background: var(--card);
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03), 0 8px 24px rgba(0,0,0,0.04);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 20px 40px rgba(0,0,0,0.08);
+  }
+  .thumb {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: linear-gradient(135deg, #f5ead0 0%, #ffe9a8 40%, #ffd6d6 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .thumb .placeholder {
+    font: 600 12px/1.5 ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(26, 21, 16, 0.4);
+    text-align: center;
+    padding: 20px;
+  }
+  .thumb .spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid rgba(26, 21, 16, 0.12);
+    border-top-color: #c68a10;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 12px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .thumb-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+  .num {
+    position: absolute;
+    top: 12px;
+    left: 14px;
+    font: 700 13px/1 ui-sans-serif, system-ui, sans-serif;
+    background: rgba(26, 21, 16, 0.72);
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.08em;
+    backdrop-filter: blur(6px);
+    z-index: 2;
+  }
+  .status-pill {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    font: 600 10px/1 ui-sans-serif, system-ui, sans-serif;
+    padding: 6px 9px;
+    border-radius: 999px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    z-index: 2;
+  }
+  .status-pill.ok { background: #2d7a3d; color: #fff; }
+  .status-pill.pending { background: #c68a10; color: #fff; }
+  .status-pill.failed { background: #a63030; color: #fff; }
+  .meta {
+    padding: 18px 20px 20px;
+  }
+  .title {
+    font: 600 18px/1.25 ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+  }
+  .desc {
+    font: 400 14px/1.5 ui-sans-serif, system-ui, sans-serif;
+    color: var(--muted);
+    margin: 0;
+  }
+  .actions {
+    margin-top: 14px;
+    display: flex;
+    gap: 8px;
+  }
+  .btn {
+    font: 600 12px/1 ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 9px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .btn:hover { background: var(--accent-soft); }
+  .btn.primary {
+    background: var(--ink);
+    color: #fff;
+    border-color: var(--ink);
+  }
+  .btn.primary:hover { background: #000; }
+
+  /* lightbox */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 21, 16, 0.92);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 40px;
+    cursor: zoom-out;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 12px;
+    box-shadow: 0 20px 80px rgba(0,0,0,0.6);
+  }
+
+  footer {
+    text-align: center;
+    padding: 40px 24px 60px;
+    color: var(--muted);
+    font: 400 13px/1.6 ui-sans-serif, system-ui, sans-serif;
+    border-top: 1px solid var(--border);
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  footer code {
+    background: var(--accent-soft);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+  <header class="hero">
+    <div class="kicker">Key Visual Lab · Nancy × Lem</div>
+    <h1>Grandma, her daughter,<br>and a <em>giant Lem</em></h1>
+    <p class="sub">Ten scene variations for the website's hero key visual.
+       Same two characters, same matching expressions, looking right
+       at a wildly oversized Lem. Click any to view full size.</p>
+    <div class="status" id="status">
+      <span class="dot"></span>
+      <span id="statusText">Generating · waiting for first image</span>
+    </div>
+  </header>
+
+  <section class="grid" id="grid"></section>
+
+  <div class="lightbox" id="lightbox">
+    <img id="lightboxImg" src="" alt="" />
+  </div>
+
+  <footer>
+    Assets generated with <code>gemini-2.5-flash-image</code> · auto-refreshes every 5s while generating ·
+    Reference: <code>lem-ref.jpg</code>
+  </footer>
+
+<script>
+const SCENES = [
+  { key: "01_kitchen_laptop",        title: "Kitchen Table Laptop Reveal",  desc: "Giant Lem bursting out of a sunlit kitchen laptop screen." },
+  { key: "02_living_room_tv",        title: "Living Room TV Discovery",     desc: "Massive Lem floating out of their flat-screen TV." },
+  { key: "03_kitchen_window",        title: "Kitchen Window Floating Lem",  desc: "Colossal Lem glowing in the sky like a second sun outside the window." },
+  { key: "04_driveway_package",      title: "Giant Package Delivery",       desc: "A delivery truck dropped off a Lem the size of a small tree." },
+  { key: "05_grocery_aisle",         title: "Supermarket End-Cap",          desc: "Six-foot Lem stacked as a grocery-store end-cap display." },
+  { key: "06_park_bench_sky",        title: "Park Bench UFO Lem",           desc: "Lem hovering above the treetops like a glowing UFO." },
+  { key: "07_times_square_billboard",title: "Times Square Billboard",       desc: "Twenty-story glowing Lem billboard on a neon-soaked street." },
+  { key: "08_museum_pedestal",       title: "Museum Gallery Exhibit",       desc: "Lem on a pedestal in a modern art museum — Lem as sculpture." },
+  { key: "09_backyard_pool_float",   title: "Pool Float Surprise",          desc: "Inflatable Lem pool float drifting past their deck chairs." },
+  { key: "10_drive_in_theater",      title: "Drive-In Movie Theater",       desc: "Giant Lem projected across a twilight drive-in screen." },
+];
+
+const grid = document.getElementById("grid");
+const statusText = document.getElementById("statusText");
+const statusEl = document.getElementById("status");
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.getElementById("lightboxImg");
+
+function renderGrid(manifest) {
+  grid.innerHTML = "";
+  let okCount = 0, failCount = 0;
+  const byKey = Object.fromEntries((manifest || []).map(m => [m.key, m]));
+
+  SCENES.forEach((scene, i) => {
+    const rec = byKey[scene.key];
+    const status = rec ? rec.status : "pending";
+    const filename = `generated/${scene.key}.png`;
+    const hasImg = (status === "ok" || status === "cached");
+    if (hasImg) okCount++;
+    if (status === "failed") failCount++;
+
+    const card = document.createElement("article");
+    card.className = "card";
+    const pillClass = hasImg ? "ok" : (status === "failed" ? "failed" : "pending");
+    const pillLabel = hasImg ? "Ready" : (status === "failed" ? "Retry" : "Generating");
+
+    card.innerHTML = `
+      <div class="thumb" data-file="${filename}">
+        <span class="num">${String(i + 1).padStart(2, "0")}</span>
+        <span class="status-pill ${pillClass}">${pillLabel}</span>
+        ${ hasImg
+          ? `<img src="${filename}?v=${Date.now()}" alt="${scene.title}" />`
+          : `<div class="thumb-inner">
+               ${status === "failed" ? "" : `<div class="spinner"></div>`}
+               <div class="placeholder">${status === "failed" ? "Generation failed" : "Rendering…"}</div>
+             </div>`
+        }
+      </div>
+      <div class="meta">
+        <h3 class="title">${scene.title}</h3>
+        <p class="desc">${scene.desc}</p>
+        <div class="actions">
+          <a class="btn primary" href="${filename}" target="_blank" ${hasImg ? "" : "style=\"pointer-events:none;opacity:0.35\""}>Open full</a>
+          <a class="btn" href="${filename}" download ${hasImg ? "" : "style=\"pointer-events:none;opacity:0.35\""}>Download</a>
+        </div>
+      </div>
+    `;
+
+    const thumb = card.querySelector(".thumb");
+    thumb.addEventListener("click", () => {
+      if (!hasImg) return;
+      lightboxImg.src = filename + "?v=" + Date.now();
+      lightbox.classList.add("open");
+    });
+
+    grid.appendChild(card);
+  });
+
+  const total = SCENES.length;
+  if (okCount === total) {
+    statusText.textContent = `All ${total} variations ready`;
+    statusEl.style.background = "#d6ead9";
+    statusEl.style.color = "#2d7a3d";
+    statusEl.querySelector(".dot").style.background = "#2d7a3d";
+    statusEl.querySelector(".dot").style.animation = "none";
+  } else {
+    statusText.textContent = `Generating · ${okCount}/${total} complete${failCount ? ` · ${failCount} failed` : ""}`;
+  }
+}
+
+lightbox.addEventListener("click", () => lightbox.classList.remove("open"));
+document.addEventListener("keydown", e => { if (e.key === "Escape") lightbox.classList.remove("open"); });
+
+async function loadManifest() {
+  try {
+    const r = await fetch("manifest.json?v=" + Date.now());
+    if (!r.ok) throw new Error("no manifest yet");
+    const m = await r.json();
+    renderGrid(m);
+    const allDone = m.length === SCENES.length && m.every(x => x.status === "ok" || x.status === "cached");
+    return allDone;
+  } catch {
+    renderGrid([]);
+    return false;
+  }
+}
+
+(async function tick() {
+  const done = await loadManifest();
+  if (!done) setTimeout(tick, 5000);
+})();
+</script>
+</body>
+</html>

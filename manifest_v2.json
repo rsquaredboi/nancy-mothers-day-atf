@@ -1,0 +1,62 @@
+[
+  {
+    "key": "v2_01_self_bath",
+    "title": "Self-Purchase: Bubble Bath Solo",
+    "file": "v2_01_self_bath.png",
+    "status": "ok"
+  },
+  {
+    "key": "v2_02_self_couch",
+    "title": "Self-Purchase: Couch Night In",
+    "file": "v2_02_self_couch.png",
+    "status": "ok"
+  },
+  {
+    "key": "v2_03_self_nightstand",
+    "title": "Self-Purchase: Nightstand Moment",
+    "file": "v2_03_self_nightstand.png",
+    "status": "ok"
+  },
+  {
+    "key": "v2_04_partner_giftwrap",
+    "title": "Partner Gift: Wrapping It",
+    "file": "v2_04_partner_giftwrap.png",
+    "status": "ok"
+  },
+  {
+    "key": "v2_05_partner_doorstep",
+    "title": "Partner Gift: Discreet Delivery",
+    "file": "v2_05_partner_doorstep.png",
+    "status": "ok"
+  },
+  {
+    "key": "v2_06_bestie_brunch",
+    "title": "Bestie Gift: Brunch Table",
+    "file": "v2_06_bestie_brunch.png",
+    "status": "ok"
+  },
+  {
+    "key": "v2_07_bestie_wine",
+    "title": "Bestie Gift: Wine Night",
+    "file": "v2_07_bestie_wine.png",
+    "status": "ok"
+  },
+  {
+    "key": "v2_08_mom_reaction",
+    "title": "Ironic Your Mom: The Reaction",
+    "file": "v2_08_mom_reaction.png",
+    "status": "ok"
+  },
+  {
+    "key": "v2_09_office_desk",
+    "title": "Every Mom: Office Desk",
+    "file": "v2_09_office_desk.png",
+    "status": "ok"
+  },
+  {
+    "key": "v2_10_unboxing_pov",
+    "title": "POV: The Unboxing",
+    "file": "v2_10_unboxing_pov.png",
+    "status": "ok"
+  }
+]

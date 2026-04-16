@@ -1,0 +1,62 @@
+[
+  {
+    "key": "01_kitchen_laptop",
+    "title": "Kitchen Table Laptop Reveal",
+    "file": "01_kitchen_laptop.png",
+    "status": "ok"
+  },
+  {
+    "key": "02_living_room_tv",
+    "title": "Living Room TV Discovery",
+    "file": "02_living_room_tv.png",
+    "status": "ok"
+  },
+  {
+    "key": "03_kitchen_window",
+    "title": "Kitchen Window Floating Lem",
+    "file": "03_kitchen_window.png",
+    "status": "ok"
+  },
+  {
+    "key": "04_driveway_package",
+    "title": "Giant Package Delivery",
+    "file": "04_driveway_package.png",
+    "status": "ok"
+  },
+  {
+    "key": "05_grocery_aisle",
+    "title": "Supermarket End-Cap",
+    "file": "05_grocery_aisle.png",
+    "status": "ok"
+  },
+  {
+    "key": "06_park_bench_sky",
+    "title": "Park Bench UFO Lem",
+    "file": "06_park_bench_sky.png",
+    "status": "ok"
+  },
+  {
+    "key": "07_times_square_billboard",
+    "title": "Times Square Billboard",
+    "file": "07_times_square_billboard.png",
+    "status": "ok"
+  },
+  {
+    "key": "08_museum_pedestal",
+    "title": "Museum Gallery Exhibit",
+    "file": "08_museum_pedestal.png",
+    "status": "ok"
+  },
+  {
+    "key": "09_backyard_pool_float",
+    "title": "Pool Float Surprise",
+    "file": "09_backyard_pool_float.png",
+    "status": "ok"
+  },
+  {
+    "key": "10_drive_in_theater",
+    "title": "Drive-In Movie Theater",
+    "file": "10_drive_in_theater.png",
+    "status": "ok"
+  }
+]
