@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hello Nancy | Mother's Day Sale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f4efe6;
+    --ink: #1c1917;
+    --muted: rgba(255,255,255,0.8);
+    --pink: #e8309e;
+    --white: #ffffff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ── ANNOUNCEMENT BAR ── */
+  .announcement {
+    background: #eae4d8;
+    padding: 12px 24px;
+    text-align: center;
+    font: 500 11.5px/1 'DM Sans', sans-serif;
+    color: var(--ink);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 20;
+  }
+  .announcement .pause {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 22px;
+    height: 22px;
+    border: 1px solid rgba(28, 25, 23, 0.25);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: transparent;
+  }
+  .announcement .pause svg {
+    width: 10px;
+    height: 10px;
+    fill: var(--ink);
+  }
+
+  /* ── HERO (full-bleed) ── */
+  .hero-wrap {
+    position: relative;
+    width: 100%;
+    height: calc(100dvh - 42px);
+    min-height: 620px;
+    overflow: hidden;
+    background: #2a2319;
+  }
+
+  /* Slides */
+  .hero-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    display: block;
+    opacity: 0;
+    transform: scale(1.05);
+    transition:
+      opacity 0.9s cubic-bezier(0.34, 1.56, 0.64, 1),
+      transform 5s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1;
+    will-change: opacity, transform;
+  }
+  .hero-slide.active {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 2;
+  }
+
+  /* Subtle bottom gradient for text legibility */
+  .hero-wrap::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(0,0,0,0.15) 0%,
+      rgba(0,0,0,0) 30%,
+      rgba(0,0,0,0) 55%,
+      rgba(0,0,0,0.55) 100%
+    );
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  /* ── NAV (overlaid) ── */
+  .nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 28px 40px;
+    z-index: 10;
+    color: var(--white);
+  }
+  .nav-left, .nav-right {
+    display: flex;
+    gap: 32px;
+    font: 500 13px/1 'DM Sans', sans-serif;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .nav-right { justify-content: flex-end; }
+  .nav a {
+    color: var(--white);
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .nav a:hover { opacity: 0.7; }
+  .nav-brand {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 32px;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    text-decoration: none;
+    text-align: center;
+  }
+
+  /* ── CAPTION (bottom-left) ── */
+  .caption {
+    position: absolute;
+    bottom: 36px;
+    left: 40px;
+    z-index: 10;
+    color: var(--white);
+    max-width: 640px;
+  }
+
+  @keyframes snapIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .reveal { opacity: 0; animation: snapIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+  .reveal-d1 { animation-delay: 0.2s; }
+  .reveal-d2 { animation-delay: 0.35s; }
+  .reveal-d3 { animation-delay: 0.55s; }
+  .reveal-d4 { animation-delay: 0.75s; }
+
+  .kicker {
+    font: 500 11px/1 'DM Sans', sans-serif;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--white);
+    opacity: 0.85;
+    margin-bottom: 14px;
+  }
+  .kicker span { opacity: 0.5; margin: 0 6px; }
+
+  .caption h1 {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: clamp(40px, 4.6vw, 64px);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    margin-bottom: 20px;
+    color: var(--white);
+    text-shadow: 0 2px 20px rgba(0,0,0,0.2);
+  }
+  .rotating-line {
+    display: flex;
+    align-items: baseline;
+    gap: 0.2em;
+    flex-wrap: wrap;
+  }
+  .rotating-word {
+    font-style: italic;
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    position: relative;
+    display: inline-block;
+    min-width: 3em;
+  }
+  .rotating-word .word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: absolute;
+    left: 0;
+    white-space: nowrap;
+  }
+  .rotating-word .word.active {
+    opacity: 1;
+    transform: translateY(0);
+    position: relative;
+  }
+  .your-mom-wink {
+    font: 400 0.3em/1 'Fraunces', serif;
+    font-style: italic;
+    vertical-align: super;
+    margin-left: 6px;
+    opacity: 0.75;
+    letter-spacing: 0;
+  }
+
+  .caption .sub {
+    font: 400 15px/1.55 'DM Sans', sans-serif;
+    color: var(--white);
+    opacity: 0.92;
+    max-width: 460px;
+    margin-bottom: 24px;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.25);
+  }
+  .caption .sub strong { font-weight: 600; }
+
+  /* Outlined pill CTA — Rhode style */
+  .cta-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    border: 1.5px solid var(--white);
+    border-radius: 999px;
+    font: 500 13px/1 'DM Sans', sans-serif;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--white);
+    text-decoration: none;
+    background: transparent;
+    backdrop-filter: blur(6px);
+    transition:
+      background 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+      color 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+      transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .cta-pill:hover {
+    background: var(--white);
+    color: var(--ink);
+    transform: translateY(-2px);
+  }
+  .cta-pill:active {
+    transform: translateY(0) scale(0.97);
+    transition-duration: 0.06s;
+  }
+
+  /* ── Slide dots (bottom-center) ── */
+  .slide-dots {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+  }
+  .slide-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.38);
+    transition: background 0.3s, width 0.3s;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+  }
+  .slide-dot.active {
+    width: 22px;
+    border-radius: 4px;
+    background: var(--white);
+  }
+
+  /* ── MOTHER'S DAY TAG (bottom-right) ── */
+  .md-tag {
+    position: absolute;
+    bottom: 36px;
+    right: 40px;
+    z-index: 10;
+    color: var(--white);
+    font: 500 11px/1.4 'DM Sans', sans-serif;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-align: right;
+    opacity: 0.92;
+  }
+  .md-tag .big {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 16px;
+    letter-spacing: -0.01em;
+    text-transform: none;
+    margin-top: 2px;
+    opacity: 0.95;
+  }
+
+  /* ── PRESS BAR (below hero) ── */
+  .press-bar {
+    padding: 28px 40px;
+    background: var(--bg);
+    text-align: center;
+  }
+  .press-label {
+    font: 500 10.5px/1 'DM Sans', sans-serif;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(28, 25, 23, 0.55);
+    margin-bottom: 18px;
+  }
+  .press-logos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 48px;
+    flex-wrap: wrap;
+  }
+  .press-logos span {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--ink);
+    opacity: 0.5;
+    letter-spacing: -0.02em;
+    transition: opacity 0.3s;
+  }
+  .press-logos span:hover { opacity: 0.85; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    .announcement { font-size: 10px; padding: 10px 16px; letter-spacing: 0.14em; }
+    .announcement .pause { display: none; }
+
+    .hero-wrap {
+      height: calc(100dvh - 38px);
+      min-height: 560px;
+    }
+
+    .nav {
+      padding: 18px 20px;
+      grid-template-columns: auto 1fr auto;
+    }
+    .nav-left, .nav-right { display: none; }
+    .nav-brand { font-size: 26px; grid-column: 1 / -1; text-align: center; }
+    .nav-hamburger {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      color: var(--white);
+    }
+    .nav-hamburger svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+
+    .caption {
+      bottom: 72px;
+      left: 20px;
+      right: 20px;
+      max-width: 100%;
+    }
+    .caption h1 { font-size: 34px; }
+    .kicker { font-size: 9.5px; letter-spacing: 0.18em; margin-bottom: 10px; }
+    .caption .sub { font-size: 13.5px; margin-bottom: 18px; }
+    .cta-pill { padding: 12px 22px; font-size: 11.5px; }
+
+    .slide-dots {
+      bottom: 20px;
+    }
+    .md-tag {
+      bottom: 20px;
+      right: auto;
+      left: 20px;
+      text-align: left;
+      font-size: 9.5px;
+      letter-spacing: 0.14em;
+    }
+    .md-tag .big { font-size: 13px; }
+
+    /* On mobile, put MD tag at top-right of caption instead */
+    .md-tag { display: none; }
+
+    .press-bar { padding: 20px 16px; }
+    .press-label { font-size: 9.5px; margin-bottom: 12px; letter-spacing: 0.18em; }
+    .press-logos { gap: 20px; }
+    .press-logos span { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ANNOUNCEMENT BAR (Rhode style — minimal taupe) -->
+  <div class="announcement">
+    Mother's Day Sale · The gift she'd never buy herself · Up to 50% off
+    <button class="pause" id="pauseBtn" aria-label="Pause slideshow">
+      <svg viewBox="0 0 12 14"><rect x="1" y="1" width="3" height="12"/><rect x="8" y="1" width="3" height="12"/></svg>
+    </button>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero-wrap" id="heroWrap">
+
+    <!-- NAV overlay -->
+    <nav class="nav">
+      <div class="nav-left">
+        <a href="#">Shop</a>
+        <a href="#">About</a>
+        <a href="#">Sex Ed</a>
+      </div>
+      <a href="#" class="nav-brand">Nancy</a>
+      <div class="nav-right">
+        <a href="#">Search</a>
+        <a href="#">Account</a>
+        <a href="#">Cart (0)</a>
+      </div>
+      <button class="nav-hamburger" aria-label="Menu">
+        <svg viewBox="0 0 24 24"><line x1="4" y1="8" x2="20" y2="8"/><line x1="4" y1="16" x2="20" y2="16"/></svg>
+      </button>
+    </nav>
+
+    <!-- Slides injected by JS -->
+
+    <!-- CAPTION bottom-left -->
+    <div class="caption">
+      <div class="kicker reveal reveal-d1">
+        Not flowers<span>/</span>Not brunch<span>/</span>Not a candle
+      </div>
+
+      <h1 class="reveal reveal-d2">
+        <span class="rotating-line">
+          For
+          <span class="rotating-word" id="rotatingWord">
+            <span class="word active">Yourself.</span>
+            <span class="word">Her.</span>
+            <span class="word">Your Wife.</span>
+            <span class="word">Your Bestie.</span>
+            <span class="word">Every Mom.</span>
+            <span class="word your-mom">Your Mom.<sup class="your-mom-wink">(yes, really)</sup></span>
+          </span>
+        </span>
+        <span class="static">Something better.</span>
+      </h1>
+
+      <p class="sub reveal reveal-d3">
+        For any mom who says "I don't need anything."
+        <strong>She's lying.</strong>
+        Quiet. Discreet. Beginner-friendly. 1M+ women already chose Nancy.
+      </p>
+
+      <a href="#" class="cta-pill reveal reveal-d4">
+        Shop Nancy
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+
+    <!-- Slide dots -->
+    <div class="slide-dots" id="slideDots"></div>
+
+    <!-- Mother's Day tag (bottom-right) -->
+    <div class="md-tag">
+      Mother's Day 2026
+      <div class="big">Order by May 8 for delivery</div>
+    </div>
+
+  </div>
+
+  <!-- PRESS BAR -->
+  <section class="press-bar">
+    <div class="press-label">As seen on</div>
+    <div class="press-logos">
+      <span>The Sun</span>
+      <span>The Guardian</span>
+      <span>SheKnows</span>
+      <span>TimeOut</span>
+      <span>TATLER</span>
+      <span>Sarasense</span>
+      <span>Vocal</span>
+    </div>
+  </section>
+
+<script>
+const VISUALS = [
+  { key: "v2_02_self_couch",       label: "Couch Night In",     dir: "generated_v2" },
+  { key: "v2_04_partner_giftwrap", label: "Partner Gift Wrap",  dir: "generated_v2" },
+  { key: "v2_07_bestie_wine",      label: "Wine Night",         dir: "generated_v2" },
+  { key: "v2_08_mom_reaction",     label: "Your Mom Reaction",  dir: "generated_v2" },
+  { key: "v2_01_self_bath",        label: "Bubble Bath",        dir: "generated_v2" },
+  { key: "v2_03_self_nightstand",  label: "Nightstand",         dir: "generated_v2" },
+  { key: "v2_05_partner_doorstep", label: "Discreet Delivery",  dir: "generated_v2" },
+  { key: "v2_06_bestie_brunch",    label: "Brunch Reveal",      dir: "generated_v2" },
+  { key: "v2_09_office_desk",      label: "Boss Mom",           dir: "generated_v2" },
+  { key: "v2_10_unboxing_pov",     label: "POV Unboxing",       dir: "generated_v2" },
+];
+
+const heroWrap = document.getElementById("heroWrap");
+const dotsEl = document.getElementById("slideDots");
+const pauseBtn = document.getElementById("pauseBtn");
+const slides = [];
+const dots = [];
+let activeIdx = 0;
+let autoTimer = null;
+let paused = false;
+const INTERVAL = 3600;
+
+// Create stacked slide images (insert after nav, before caption)
+const caption = document.querySelector(".caption");
+VISUALS.forEach((v, i) => {
+  const img = document.createElement("img");
+  img.className = "hero-slide" + (i === 0 ? " active" : "");
+  img.src = `${v.dir}/${v.key}.png`;
+  img.alt = v.label;
+  img.loading = i < 3 ? "eager" : "lazy";
+  heroWrap.insertBefore(img, caption);
+  slides.push(img);
+});
+
+// Dots
+VISUALS.forEach((_, i) => {
+  const dot = document.createElement("button");
+  dot.className = "slide-dot" + (i === 0 ? " active" : "");
+  dot.setAttribute("aria-label", `Go to slide ${i + 1}`);
+  dot.addEventListener("click", () => { goTo(i); resetAuto(); });
+  dotsEl.appendChild(dot);
+  dots.push(dot);
+});
+
+function goTo(idx) {
+  slides[activeIdx].classList.remove("active");
+  dots[activeIdx].classList.remove("active");
+  activeIdx = idx;
+  slides[activeIdx].classList.add("active");
+  dots[activeIdx].classList.add("active");
+}
+
+function advance() { goTo((activeIdx + 1) % VISUALS.length); }
+
+function resetAuto() {
+  clearInterval(autoTimer);
+  if (!paused) autoTimer = setInterval(advance, INTERVAL);
+}
+
+// Pause button
+pauseBtn.addEventListener("click", () => {
+  paused = !paused;
+  if (paused) {
+    clearInterval(autoTimer);
+    pauseBtn.innerHTML = '<svg viewBox="0 0 12 14"><path d="M1 1 L11 7 L1 13 Z"/></svg>';
+    pauseBtn.setAttribute("aria-label", "Play slideshow");
+  } else {
+    autoTimer = setInterval(advance, INTERVAL);
+    pauseBtn.innerHTML = '<svg viewBox="0 0 12 14"><rect x="1" y="1" width="3" height="12"/><rect x="8" y="1" width="3" height="12"/></svg>';
+    pauseBtn.setAttribute("aria-label", "Pause slideshow");
+  }
+});
+
+// Rotating headline word
+(function() {
+  const container = document.getElementById('rotatingWord');
+  if (!container) return;
+  const words = container.querySelectorAll('.word');
+  let idx = 0;
+  setInterval(() => {
+    words[idx].classList.remove('active');
+    idx = (idx + 1) % words.length;
+    words[idx].classList.add('active');
+  }, 2400);
+})();
+
+// Kick off
+autoTimer = setInterval(advance, INTERVAL);
+</script>
+</body>
+</html>
