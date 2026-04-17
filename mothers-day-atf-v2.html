@@ -89,18 +89,24 @@
     z-index: 2;
   }
 
-  /* Subtle bottom gradient for text legibility */
+  /* Gradient for text legibility — stronger on bottom-left where caption sits */
   .hero-wrap::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      180deg,
-      rgba(0,0,0,0.15) 0%,
-      rgba(0,0,0,0) 30%,
-      rgba(0,0,0,0) 55%,
-      rgba(0,0,0,0.55) 100%
-    );
+    background:
+      linear-gradient(
+        180deg,
+        rgba(0,0,0,0.25) 0%,
+        rgba(0,0,0,0) 22%,
+        rgba(0,0,0,0) 45%,
+        rgba(0,0,0,0.65) 100%
+      ),
+      radial-gradient(
+        ellipse at bottom left,
+        rgba(0,0,0,0.5) 0%,
+        rgba(0,0,0,0) 55%
+      );
     z-index: 3;
     pointer-events: none;
   }
@@ -141,6 +147,8 @@
     text-decoration: none;
     text-align: center;
   }
+  /* Hide hamburger on desktop (only shown in mobile breakpoint below) */
+  .nav-hamburger { display: none; }
 
   /* ── CAPTION (bottom-left) ── */
   .caption {
@@ -352,20 +360,31 @@
     }
 
     .nav {
-      padding: 18px 20px;
+      padding: 16px 20px;
       grid-template-columns: auto 1fr auto;
     }
     .nav-left, .nav-right { display: none; }
-    .nav-brand { font-size: 26px; grid-column: 1 / -1; text-align: center; }
+    .nav-brand {
+      font-size: 24px;
+      grid-column: 2;
+      text-align: center;
+      justify-self: center;
+    }
     .nav-hamburger {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
       color: var(--white);
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      grid-column: 1;
+      justify-self: start;
     }
-    .nav-hamburger svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+    .nav-hamburger svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; }
 
     .caption {
       bottom: 72px;
